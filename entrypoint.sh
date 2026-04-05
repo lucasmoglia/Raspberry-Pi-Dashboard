@@ -13,9 +13,9 @@ if [ ! -f "$CONFIG_FILE" ]; then
     printf '<?php\nreturn array();\n?>\n' > "$CONFIG_FILE"
 fi
 
-# Fix ownership so www-data (Apache) can read/write it
-chown www-data:www-data "$CONFIG_FILE"
-chmod 664 "$CONFIG_FILE"
+# Fix ownership of the config directory so www-data can traverse it and read/write files
+chown -R www-data:www-data "$CONFIG_DIR"
+chmod -R 775 "$CONFIG_DIR"
 
 # Symlink the persistent config into the web root
 ln -sf "$CONFIG_FILE" "$WEB_CONFIG"
