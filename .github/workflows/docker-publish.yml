@@ -3,7 +3,7 @@ name: Build & Publish Docker Image
 on:
   push:
     branches:
-      - master
+      - release
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
@@ -46,7 +46,7 @@ jobs:
             type=ref,event=branch
             # Tag with git short SHA (e.g. sha-a1b2c3d)
             type=sha,prefix=sha-,format=short
-            # Tag as 'latest' when pushed to master
+            # Tag as 'latest' when pushed to release
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Set up Docker Buildx
