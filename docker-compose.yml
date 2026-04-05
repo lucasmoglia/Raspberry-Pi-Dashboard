@@ -17,6 +17,11 @@ services:
       - /sys:/sys:ro
       # OS release info  (cat /etc/os-release)
       - /etc/os-release:/etc/os-release:ro
+      # Show the Pi's real hostname instead of the container ID
+      - /etc/hostname:/etc/hostname:ro
+      - /etc/hosts:/etc/hosts:ro
+      # lsusb — access to USB devices list
+      - /dev/bus/usb:/dev/bus/usb:ro
       # Systemd shutdown scheduling (Power management feature)
       - /run/systemd:/run/systemd:ro
       # Persist only the dashboard config file across container restarts.
@@ -29,6 +34,13 @@ services:
     # ----------------------------------------------------------------
     cap_add:
       - SYS_BOOT   # allows shutdown/reboot commands
+
+    # ----------------------------------------------------------------
+    # RPi GPU devices — required for vcgencmd (core voltage, firmware)
+    # ----------------------------------------------------------------
+    devices:
+      - /dev/vcio:/dev/vcio       # GPU mailbox (vcgencmd measure_volts etc.)
+      - /dev/vchiq:/dev/vchiq     # VideoCore interface (firmware version etc.)
 
     # Needed so www-data can call `sudo /sbin/shutdown`
     # and access hardware device info (vcgencmd, lsusb, etc.)
