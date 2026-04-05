@@ -1,0 +1,9 @@
+.git
+.gitignore
+local.config
+README.md
+CHANGELOG.md
+installer.sh
+docker-compose.yml
+Dockerfile
+.dockerignore
