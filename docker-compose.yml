@@ -17,6 +17,11 @@ services:
       - /sys:/sys:ro
       # OS release info  (cat /etc/os-release)
       - /etc/os-release:/etc/os-release:ro
+      # Show the Pi's real hostname instead of the container ID
+      - /etc/hostname:/etc/hostname:ro
+      - /etc/hosts:/etc/hosts:ro
+      # lsusb — access to USB devices list
+      - /dev/bus/usb:/dev/bus/usb:ro
       # Systemd shutdown scheduling (Power management feature)
       - /run/systemd:/run/systemd:ro
       # Persist only the dashboard config file across container restarts.
