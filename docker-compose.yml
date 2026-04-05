@@ -22,11 +22,8 @@ services:
       - /etc/hosts:/etc/hosts:ro
       # lsusb — access to USB devices list
       - /dev/bus/usb:/dev/bus/usb:ro
-      # RPi-specific hardware utility (vcgencmd)
-      # We mount these from the host so the container can "borrow" them from your system.
+      # RPi-specific hardware utility (vcgencmd) mount from the host
       - /usr/bin/vcgencmd:/usr/bin/vcgencmd:ro
-      - /usr/lib/arm-linux-gnueabihf:/usr/lib/arm-linux-gnueabihf:ro
-      - /usr/lib/aarch64-linux-gnu:/usr/lib/aarch64-linux-gnu:ro
       - /opt/vc:/opt/vc:ro
       # Systemd shutdown scheduling (Power management feature)
       - /run/systemd:/run/systemd:ro
@@ -55,8 +52,7 @@ services:
     environment:
       # Set your timezone so timestamps match your local time
       - TZ=America/Argentina/Buenos_Aires
-      # Ensure the hardware utility can find its libraries
-      - LD_LIBRARY_PATH=/opt/vc/lib:/usr/lib/arm-linux-gnueabihf:/usr/lib/aarch64-linux-gnu
+      # We no longer set LD_LIBRARY_PATH globally to avoid breaking Apache's own libraries.
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/vc/bin
 
 volumes:
