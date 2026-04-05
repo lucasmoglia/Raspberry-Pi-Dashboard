@@ -24,8 +24,9 @@ COPY . /var/www/html/
 # Remove the installer script from the web root (not needed at runtime)
 RUN rm -f /var/www/html/installer.sh
 
-# Create local.config with correct ownership so PHP (www-data) can write to it
-RUN touch /var/www/html/local.config \
+# Seed local.config with a valid empty PHP array so `require` returns []
+# (an empty file returns 1 in PHP, which breaks array_replace_recursive)
+RUN printf '<?php\nreturn array();\n?>\n' > /var/www/html/local.config \
     && chown www-data:www-data /var/www/html/local.config \
     && chmod 664 /var/www/html/local.config
 
