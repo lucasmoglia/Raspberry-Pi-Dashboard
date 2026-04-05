@@ -1,0 +1,41 @@
+services:
+  rpi-dashboard:
+    build: .
+    container_name: rpi-dashboard
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+
+    # ----------------------------------------------------------------
+    # Host system access — required so the dashboard can read real
+    # hardware data from the Pi via /proc, /sys, etc.
+    # ----------------------------------------------------------------
+    volumes:
+      # Core system stats (uptime, CPU load, memory)
+      - /proc:/proc:ro
+      # CPU temperature & frequency
+      - /sys:/sys:ro
+      # OS release info  (cat /etc/os-release)
+      - /etc/os-release:/etc/os-release:ro
+      # Systemd shutdown scheduling (Power management feature)
+      - /run/systemd:/run/systemd:ro
+      # Persist dashboard config (password, thresholds) across restarts
+      - rpi_dashboard_config:/var/www/html/
+
+    # ----------------------------------------------------------------
+    # Capabilities needed for shutdown/reboot support.
+    # Remove cap_sys_boot if you don't use the Power Management feature.
+    # ----------------------------------------------------------------
+    cap_add:
+      - SYS_BOOT   # allows shutdown/reboot commands
+
+    # Needed so www-data can call `sudo /sbin/shutdown`
+    # and access hardware device info (vcgencmd, lsusb, etc.)
+    privileged: true
+
+    environment:
+      # Set your timezone so timestamps match your local time
+      - TZ=America/Argentina/Buenos_Aires
+
+volumes:
+  rpi_dashboard_config:
