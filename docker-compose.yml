@@ -55,6 +55,9 @@ services:
     environment:
       # Set your timezone so timestamps match your local time
       - TZ=America/Argentina/Buenos_Aires
+      # Ensure the hardware utility can find its libraries
+      - LD_LIBRARY_PATH=/opt/vc/lib:/usr/lib/arm-linux-gnueabihf:/usr/lib/aarch64-linux-gnu
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/vc/bin
 
 volumes:
   rpi_dashboard_config:
