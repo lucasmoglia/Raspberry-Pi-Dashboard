@@ -10,7 +10,16 @@ RUN apt-get update && apt-get install -y \
     util-linux \
     lsb-release \
     sudo \
+    passwd \
+    vcgencmd \
+    || apt-get install -y libraspberrypi-bin \
     && rm -rf /var/lib/apt/lists/*
+
+# (Optional) Ensure vcgencmd is in the PATH if installed in /opt/vc/bin
+ENV PATH="/opt/vc/bin:${PATH}"
+
+# Grant www-data access to the video group (required for vcgencmd)
+RUN usermod -aG video www-data
 
 # Allow www-data to run shutdown/reboot via sudo (optional feature)
 RUN echo "www-data ALL=(ALL) NOPASSWD: /sbin/shutdown" >> /etc/sudoers
