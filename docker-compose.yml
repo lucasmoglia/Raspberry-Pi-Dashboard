@@ -35,6 +35,13 @@ services:
     cap_add:
       - SYS_BOOT   # allows shutdown/reboot commands
 
+    # ----------------------------------------------------------------
+    # RPi GPU devices — required for vcgencmd (core voltage, firmware)
+    # ----------------------------------------------------------------
+    devices:
+      - /dev/vcio:/dev/vcio       # GPU mailbox (vcgencmd measure_volts etc.)
+      - /dev/vchiq:/dev/vchiq     # VideoCore interface (firmware version etc.)
+
     # Needed so www-data can call `sudo /sbin/shutdown`
     # and access hardware device info (vcgencmd, lsusb, etc.)
     privileged: true
