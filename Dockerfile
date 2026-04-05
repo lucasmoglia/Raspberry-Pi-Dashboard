@@ -24,14 +24,15 @@ COPY . /var/www/html/
 # Remove the installer script from the web root (not needed at runtime)
 RUN rm -f /var/www/html/installer.sh
 
-# Seed local.config with a valid empty PHP array so `require` returns []
-# (an empty file returns 1 in PHP, which breaks array_replace_recursive)
-RUN printf '<?php\nreturn array();\n?>\n' > /var/www/html/local.config \
-    && chown www-data:www-data /var/www/html/local.config \
-    && chmod 664 /var/www/html/local.config
+# Copy and prepare the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Fix ownership of the whole project
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html
 
 EXPOSE 80
+
+# Use custom entrypoint to seed + symlink local.config before Apache starts
+ENTRYPOINT ["/entrypoint.sh"]
