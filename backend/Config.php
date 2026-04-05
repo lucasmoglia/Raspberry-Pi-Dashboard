@@ -18,6 +18,7 @@ class Config{
     }
     $this->file=$file;
     $userconf=require $file;
+    if (!is_array($userconf)) { $userconf = array(); } // guard: empty/corrupt file returns 1 in PHP
     $defaults=require $defaultfile;
     $this->data = array_replace_recursive($defaults, $userconf); // not array_merge($defaults, $userconf)! Use recursive replace!
     $this->userconf = $userconf;

@@ -19,8 +19,9 @@ services:
       - /etc/os-release:/etc/os-release:ro
       # Systemd shutdown scheduling (Power management feature)
       - /run/systemd:/run/systemd:ro
-      # Persist dashboard config (password, thresholds) across restarts
-      - rpi_dashboard_config:/var/www/html/
+      # Persist only the dashboard config file across container restarts.
+      # Do NOT mount the whole /var/www/html/ — that would shadow all app files!
+      - rpi_dashboard_config:/var/www/html/local.config
 
     # ----------------------------------------------------------------
     # Capabilities needed for shutdown/reboot support.
